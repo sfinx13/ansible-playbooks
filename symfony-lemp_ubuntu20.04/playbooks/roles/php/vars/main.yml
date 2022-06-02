@@ -1,0 +1,20 @@
+---
+php_version: 8.1
+symbolic_links:
+  php: "/usr/bin/php{{ php_version }}"
+  php-config: "/usr/bin/php-config{{ php_version }}"
+  phpize: "/usr/bin/phpize{{ php_version }}"
+directives:
+  cli:
+    error_reporting: "E_ALL"
+    display_errors: "On"
+    memory_limit: "512M"
+    date.timezone: "UTC"
+  fpm:
+    error_reporting: "E_ALL"
+    display_errors: "On"
+    cgi.fix_pathinfo: 0
+    memory_limit: "512M"
+    upload_max_filesize: "100M"
+    post_max_size: "100M"
+    date.timezone: "UTC"

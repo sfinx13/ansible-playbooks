@@ -1,0 +1,16 @@
+---
+http_host: symfony-demo.local
+www_path: /var/www/{{ http_host }}
+git_url_repository: https://github.com/symfony/demo.git
+git_branch: main
+mysql_root_password: secret
+mysql_database_url: mysql://{{ db_user }}:{{ db_password }}@{{ db_host }}:{{ db_port }}/{{ db_name }}?serverVersion={{ db_version }}
+mysql_version: 8
+db_user: root
+db_password: secret
+db_host: 127.0.0.1
+db_port: 3306
+db_name: db_demo
+app_secret: 2ca64f8d83b9e89f5f19d672841d6bb8
+app_env: dev
+symfony_console_path: "{{ www_path }}/bin/console"

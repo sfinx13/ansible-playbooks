@@ -1,0 +1,13 @@
+---
+
+- name: Download and install composer
+  ansible.builtin.script: scripts/install_composer.sh
+
+- name: Move Composer globally
+  ansible.builtin.command: mv composer.phar /usr/local/bin/composer
+  changed_when: true
+
+- name: Set permission on Composer
+  ansible.builtin.file:
+    path: /usr/local/bin/composer
+    mode: "a+x"

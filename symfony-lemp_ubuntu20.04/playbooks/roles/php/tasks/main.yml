@@ -1,0 +1,90 @@
+---
+
+- name: "The main PPA for supported PHP versions with many PECL extensions"
+  ansible.builtin.apt_repository:
+    repo: "ppa:ondrej/php"
+
+- name: "Update the repo"
+  ansible.builtin.package:
+    update_cache: true
+
+- name: "Install generic package"
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+    force: true
+  with_items:
+    - "php-imagick"
+
+- name: "Install php{{ php_version }}"
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+    update_cache: true
+    force: true
+  with_items:
+    - "php{{ php_version }}-fpm"
+    - "php{{ php_version }}-mysql"
+    - "php{{ php_version }}-bcmath"
+    - "php{{ php_version }}-bz2"
+    - "php{{ php_version }}-cli"
+    - "php{{ php_version }}-common"
+    - "php{{ php_version }}-curl"
+    - "php{{ php_version }}-dba"
+    - "php{{ php_version }}-dev"
+    - "php{{ php_version }}-enchant"
+    - "php{{ php_version }}-gd"
+    - "php{{ php_version }}-gmp"
+    - "php{{ php_version }}-imap"
+    - "php{{ php_version }}-intl"
+    - "php{{ php_version }}-mbstring"
+    - "php{{ php_version }}-mysql"
+    - "php{{ php_version }}-opcache"
+    - "php{{ php_version }}-readline"
+    - "php{{ php_version }}-sqlite3"
+    - "php{{ php_version }}-tidy"
+    - "php{{ php_version }}-xml"
+    - "php{{ php_version }}-xsl"
+    - "php{{ php_version }}-zip"
+
+- name: "select php{{ php_version }} as default alternatives"
+  community.general.alternatives:
+    name: "{{ item.key }}"
+    path: "{{ item.value }}"
+  with_dict: "{{ symbolic_links }}"
+
+- name: "[cli] set php.ini common directive"
+  ansible.builtin.lineinfile:
+    dest: "/etc/php/{{ php_version }}/cli/php.ini"
+    regexp: "{{ item.key }} ="
+    line: "{{ item.key }} = {{ item.value }}"
+  with_dict: "{{ directives.cli }}"
+
+- name: "[fpm] set php.ini commmon directive"
+  ansible.builtin.lineinfile:
+    dest: /etc/php/{{ php_version }}/fpm/php.ini
+    regexp: "{{ item.key }} ="
+    line: "{{ item.key }} = {{ item.values }}"
+  with_dict: "{{ directives.fpm }}"
+
+- name: "[fpm] set php.ini openssl directive"
+  ansible.builtin.blockinfile:
+    path: /etc/php/{{ php_version }}/fpm/php.ini
+    block: |
+      [openssl]
+      openssl.cainfo = /etc/ssl/certs/ca-certificates.crt
+      [curl]
+      curl.cainfo = /etc/ssl/certs/ca-certificates.crt
+
+- name: "[fpm] setup module opcache"
+  ansible.builtin.lineinfile:
+    path: /etc/php/{{ php_version }}/fpm/php.ini
+    line: "opcache.revalidate_freq = 0"
+
+- name: "[fpm] set utc date.timezone"
+  ansible.builtin.lineinfile:
+    path: /etc/php/{{ php_version }}/fpm/php.ini
+    regexp: '^date.timezone='
+    line: date.timezone=UTC
+    state: present
+  notify: php-fpm restart

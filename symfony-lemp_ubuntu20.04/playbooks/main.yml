@@ -1,0 +1,15 @@
+---
+
+- name: Deploy Symfony Demo Application
+  hosts: all
+  remote_user: root
+  vars:
+    - vars/default.yml
+  roles:
+    - { role: "setup", tags: "setup" }
+    - { role: "nginx", tags: "nginx" }
+    - { role: "php", tags: "php" }
+    - { role: "node", tags: "node" }
+    - { role: "mysql", tags: "mysql" }
+    - { role: "composer", tags: "composer" }
+    - { role: "application", tags: "application" }

@@ -1,0 +1,61 @@
+---
+
+- name: Set MySQL root password before installing
+  ansible.builtin.debconf:
+    name: mysql-server
+    question: mysql-server/root_password
+    value: "{{ mysql_root_password }}"
+    vtype: 'password'
+
+- name: Confirm MySQL root password before installing
+  ansible.builtin.debconf:
+    name: mysql-server
+    question: mysql-server/root_password_again
+    value: "{{ mysql_root_password }}"
+    vtype: 'password'
+
+- name: Install mysql dependencies.
+  ansible.builtin.package:
+    name: "{{ packages }}"
+    state: present
+    update_cache: true
+  vars:
+    packages:
+      - apt-utils
+      - python3-mysqldb
+
+- name: Install MySQL
+  ansible.builtin.package:
+    name: "mysql-server"
+    state: present
+    update_cache: true
+  changed_when: true
+  notify: mysql restart
+
+# Force restart
+- name: Restart service
+  ansible.builtin.command: service mysql restart
+  changed_when: true
+
+- name: Removes all anonymous user accounts
+  community.mysql.mysql_user:
+    name: ''
+    host_all: true
+    state: absent
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+- name: Removes the MySQL test database
+  community.mysql.mysql_db:
+    name: test
+    state: absent
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+- name: Create database
+  community.mysql.mysql_db:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: "{{ db_name }}"
+    state: present
+    encoding: utf8

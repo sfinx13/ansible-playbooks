@@ -1,0 +1,29 @@
+---
+
+- name: install nginx
+  ansible.builtin.package:
+    name: nginx
+    state: present
+  notify:
+    - nginx restart
+
+- name: create www directory
+  ansible.builtin.file:
+    path: "{{ www_path }}"
+    state: directory
+    mode: '0755'
+
+- name: delete default nginx site
+  ansible.builtin.file:
+    path: /etc/nginx/{{ item }}/default
+    state: absent
+  with_items:
+    - sites-enabled
+    - sites-available
+
+- name: copy nginx demo.conf
+  ansible.builtin.template:
+    src: demo.conf.j2
+    dest: /etc/nginx/sites-enabled/{{ http_host }}.conf
+    mode: '0755'
+  notify: nginx restart

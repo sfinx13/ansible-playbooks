@@ -1,0 +1,79 @@
+---
+
+- name: add SSH key for root
+  ansible.builtin.lineinfile:
+    path: ~/.ssh/authorized_keys
+    create: true
+    state: present
+    line: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    mode: "0644"
+
+- name: install Language package fr
+  ansible.builtin.package:
+    name: language-pack-fr
+    state: present
+
+- name: ensure the locale exists
+  community.general.locale_gen:
+    name: fr_FR.UTF-8
+    state: present
+
+- name: set fr_FR.UTF-8 as default locale
+  ansible.builtin.lineinfile:
+    path: /etc/default/locale
+    create: true
+    state: present
+    line: LC_ALL=fr_FR.UTF-8
+    mode: "0644"
+
+- name: update all packages
+  ansible.builtin.package:
+    update_cache: true
+    name: '*'
+    force_apt_get: true
+    state: present
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: set UTC Timezone
+  community.general.timezone:
+    hwclock: UTC
+  register: command_result
+  failed_when: "'HACK' in command_result"
+
+- name: install some basic packages
+  ansible.builtin.package:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - gcc
+      - make
+      - build-essential
+      - dos2unix
+      - wget
+      - curl
+      - unzip
+      - git
+      - git-lfs #  manages large files with Git.
+      - mcrypt # crypting program
+      - libmcrypt4 # implements all the algorithms and modes found in mcrypt
+      - libpcre3-dev
+      - libpng-dev # reads and writes PNG format files
+      - chrony #  implements of the Network Time Protocol (NTP)
+      - re2c # generates fast lexers which outputs for parser input
+      - unattended-upgrades # install software updated, including security updates
+      - whois
+      - vim
+      - pv # allows us for the monitoring of data being sent through pipe
+      - bash-completion
+      - net-tools #  includes the important tools for controlling the network subsystem
+      - procps # provides command-line and full-screen mode utilities for navigating procfs
+      - jq # is like sed for JSON data, useful to slice, filter and map and transform structured data
+      - ca-certificates # Contains the cert authorities shipped with Mozilla to allow SSL-based app to check for the authenticity of SSL connections
+      - apt-transport-https # APT's transport for downloading over HTTPS
+      - software-properties-common #  provides an abstraction of the used apt repositories
+      - libssl-dev
+      - libffi-dev
+      - python3-dev
+      - python-is-python3
+      - iputils-ping

@@ -1,0 +1,50 @@
+---
+
+- name: clone symfony project
+  ansible.builtin.git:
+    repo: "{{ git_url_repository }}"
+    dest: "{{ www_path }}"
+    single_branch: true
+    version: "{{ git_branch }}"
+    force: true
+
+- name: install dependencies
+  community.general.composer:
+    command: install
+    working_dir: "{{ www_path }}"
+    classmap_authoritative: true
+    no_dev: false
+
+- name: remove .env from repository
+  ansible.builtin.file:
+    path: "{{ www_path }}/.env"
+    state: absent
+
+- name: change file owner and group log and cache
+  ansible.builtin.file:
+    path: "{{ www_path }}/var"
+    recurse: true
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+- name: create new .env
+  ansible.builtin.template:
+    src: templates/.env.j2
+    dest: "{{ www_path }}/.env"
+    mode: '0744'
+  notify:
+    - php-fpm restart
+    - nginx restart
+
+- name: Create DB if not exists
+  ansible.builtin.command: '{{ symfony_console_path }} doctrine:database:create --if-not-exists'
+
+- name: Generate migrations
+  ansible.builtin.command: '{{ symfony_console_path }} make:migration --no-interaction'
+
+- name: Execute migrations
+  ansible.builtin.command: '{{ symfony_console_path }} doctrine:migrations:migrate --no-interaction'
+
+- name: Load data fixtures
+  ansible.builtin.command: '{{ symfony_console_path }} doctrine:fixtures:load --no-interaction'

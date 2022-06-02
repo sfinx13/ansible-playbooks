@@ -1,0 +1,17 @@
+---
+
+- name: "Add nodejs apt key"
+  ansible.builtin.apt_key:
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    state: present
+
+- name: "Add nodejs 16.x ppa for apt repo"
+  ansible.builtin.apt_repository:
+    repo: deb https://deb.nodesource.com/node_16.x focal main
+    update_cache: true
+
+- name: "Install nodejs"
+  ansible.builtin.package:
+    update_cache: true
+    name: nodejs
+    state: present
