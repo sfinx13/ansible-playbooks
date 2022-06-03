@@ -19,7 +19,7 @@ This playbook will install Symfony demo on an Ubuntu 20.04 machine
 - `symfony_console_path`: your symfony console absolute path
 
 ## Your playbook
-👉🏿 ![_IMG/tree_playbook.jpg](_IMG/tree_playbook.jpg)
+👉🏿 ![_IMG/tree_playbook.jpg](__IMG/tree_playbook.jpg)
 
 ## Runnning this Playbook
 Quick steps after cloning the repository
