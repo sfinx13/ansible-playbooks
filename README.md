@@ -55,6 +55,6 @@ ansible-playbook -v -i inventory playbooks/main.yml --ask-pass
 ```
 
 ### 6. Welcome page It works
-✌️ http://localhost:8080/fr
+💻 http://localhost:8080/fr
 
-👉🏿 ![__IMG/homepage_symfony_demo.jpg](__IMG/homepage_symfony_demo.jpg)
+![__IMG/homepage_symfony_demo.jpg](__IMG/homepage_symfony_demo.jpg)
