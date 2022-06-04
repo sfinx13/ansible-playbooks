@@ -1,0 +1,29 @@
+name: Ansible CI
+on: [push, pull_request]
+
+jobs:
+  lint:
+    name: Lint ansible playbook
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Set up Python version
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.8
+        
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible-lint
+          ansible-galaxy collection install community-general
+          ansible-galaxy collection install community-mysql
+
+      - name: Display version
+        run: ansible-lint --version
+      
+      - name: Lint playbook
+        run: ansible-lint -v symfony-lemp_ubuntu20.04/playbooks/main.yml

@@ -1,8 +1,25 @@
-# Symfony Demo on Ubuntu 20.04
+# Ansible - Deploy symfony demo on Ubuntu 20.04
 
-This playbook will install Symfony demo on an Ubuntu 20.04 machine
+This playbook will install symfony demo on an ubuntu 20.04 machine. It has been tested with docker container.
 
-## Settings
+## Playbook
+```
+symfony-lemp_ubuntu20.04/
+├── .config/
+├── playbooks/
+│   ├── roles/
+│   └── main.yml
+├── vars/
+│   └── default.yml
+├── ansible.cfg
+├── build.sh
+├── run.sh
+├── Dockerfile
+└── inventory
+```
+
+## Settings  `vars/default.yml`
+
 - `http_host`: your domain name
 - `www_path`: your web app root folder 
 - `git_url_repository`: your git url repository to clone
@@ -18,21 +35,15 @@ This playbook will install Symfony demo on an Ubuntu 20.04 machine
 - `app_env`: define dev ou prod environment
 - `symfony_console_path`: your symfony console absolute path
 
-## Your playbook
+## Secrets `vars/secrets.yml`
+
+To display the contents of an encrypted ansible-vault file without modifying it, just use the view option
+
 ```
-symfony-lemp_ubuntu20.04/
-├── .config/
-├── playbooks/
-│   ├── roles/
-│   └── main.yml
-├── vars/
-│   └── default.yml
-├── ansible.cfg
-├── build.sh
-├── run.sh
-├── Dockerfile
-└── inventory
+ansible-vault view vars/secrets.yml
 ```
+Vault password is `secret`
+
 ## Runnning this Playbook
 Quick steps after cloning the repository
 
@@ -61,12 +72,12 @@ chown [OWNER]:[GROUP] /var/log/ansible.log
 ```
 
 ### 5. Run the Playbook
-> ask-pass option is useful the first time, cause need to copy public key to the server
+> Add ask-pass option is useful the first time, cause need to copy public key to the server
 ```command
-ansible-playbook -v -i inventory playbooks/main.yml --ask-pass
+ansible-playbook -v -i inventory playbooks/main.yml --ask-pass --ask-vault-pass
 ```
 
 ### 6. Welcome page It works
 💻 http://localhost:8080/fr
 
-![__IMG/homepage_symfony_demo.jpg](__IMG/homepage_symfony_demo.jpg)
+![screenshot](images/homepage_symfony_demo.jpg)
