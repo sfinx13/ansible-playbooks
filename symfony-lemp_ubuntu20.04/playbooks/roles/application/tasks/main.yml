@@ -48,3 +48,6 @@
 
 - name: Load data fixtures
   ansible.builtin.command: '{{ symfony_console_path }} doctrine:fixtures:load --no-interaction'
+
+- name: Create environment variable file for prod
+  ansible.builtin.command: composer dump-env prod
