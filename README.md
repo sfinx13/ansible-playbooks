@@ -98,7 +98,7 @@ node-2 | SUCCESS => {
 }
 ```
 
-### 5. Run the Playbook
+### 5. Run the playbook
 > Add ask-pass option is useful the first time, cause need to copy public key to the server
 ```command
 ansible-playbook -v -i inventory playbooks/main.yml --ask-pass --ask-vault-pass
@@ -112,7 +112,7 @@ ansible-playbook -v -i inventory playbooks/main.yml --ask-pass --ask-vault-pass
 
 ![screenshot](images/homepage_symfony_demo.jpg)
 
-#### 7. Run check-http task in playbook
+#### 7. Run check-http task in the playbook
 
 ```
 ansible-playbook playbooks/main.yml --ask-vault-password --tags check-http
