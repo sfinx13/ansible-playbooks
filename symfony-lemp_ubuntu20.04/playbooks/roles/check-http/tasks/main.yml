@@ -1,0 +1,10 @@
+---
+
+- name: check that homepage returns a status 200 
+  ansible.builtin.uri: 
+    url: http://{{ inventory_hostname }}:{{ item }}
+    return_content: true
+  with_items: "{{ ports }}"
+  register: this
+  failed_when: "'Symfony Demo' not in this.content"
+  connection: local

@@ -11,3 +11,4 @@ db_port: 3306
 db_name: db_demo
 app_env: dev
 symfony_console_path: "{{ www_path }}/bin/console"
+ports: [8080, 8081]

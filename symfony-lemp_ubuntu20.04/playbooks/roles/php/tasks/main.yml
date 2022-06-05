@@ -31,12 +31,10 @@
     - "php{{ php_version }}-curl"
     - "php{{ php_version }}-dba"
     - "php{{ php_version }}-dev"
-    - "php{{ php_version }}-imap"
     - "php{{ php_version }}-intl"
     - "php{{ php_version }}-mbstring"
     - "php{{ php_version }}-mysql"
     - "php{{ php_version }}-opcache"
-    - "php{{ php_version }}-sqlite3"
 
 - name: "select php{{ php_version }} as default alternatives"
   community.general.alternatives:

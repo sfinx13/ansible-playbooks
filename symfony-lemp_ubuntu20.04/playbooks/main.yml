@@ -14,3 +14,4 @@
     - { role: "mysql", tags: "mysql" }
     - { role: "composer", tags: "composer" }
     - { role: "application", tags: "application" }
+    - { role: "check-http", tags: "check-http" }
