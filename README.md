@@ -44,7 +44,7 @@ ansible-vault view vars/secrets.yml
 ```
 Vault password is `secret`
 
-## Runnning this Playbook
+## Runnning the playbook
 Quick steps after cloning the repository
 
 ### 0. Edit /etc/hosts
