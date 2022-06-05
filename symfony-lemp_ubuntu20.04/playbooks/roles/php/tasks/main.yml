@@ -35,6 +35,7 @@
     - "php{{ php_version }}-mbstring"
     - "php{{ php_version }}-mysql"
     - "php{{ php_version }}-opcache"
+    - "php{{ php_version }}-sqlite3"
 
 - name: "select php{{ php_version }} as default alternatives"
   community.general.alternatives:
