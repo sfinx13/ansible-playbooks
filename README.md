@@ -2,6 +2,10 @@
 
 This playbook will install symfony demo on an ubuntu 20.04 machine. It has been tested with docker container.
 
+## Prerequisites
+Make sure you have installed all of the following prerequisites on your development machine:
+* Docker - [Download & Install Docker](https://docs.docker.com/engine/install/). 
+
 ## Playbook
 ```
 symfony-lemp_ubuntu20.04/
@@ -64,14 +68,19 @@ cd ansible-playbooks/symfony-lemp_ubuntu20.04
 vi vars/default.yml
 ```
 
-### 3. Enable the logs on node manager
+### 3. Instll pip dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Enable the logs on node manager
 ```bash
 touch /var/log/ansible.log 
 chmod 640 /var/log/ansible.log
 chown [OWNER]:[GROUP] /var/log/ansible.log
 ```
 
-### 4. Launch docker container to test the playbook
+### 5. Launch docker container to test the playbook
 ```bash
 ./build.sh
 ./run.sh # Expose port 80 from container and map with host port 8080
@@ -98,13 +107,42 @@ node-2 | SUCCESS => {
 }
 ```
 
-### 5. Run the playbook
+### 6. Run the playbook
 > Add ask-pass option is useful the first time, cause need to copy public key to the server
 ```command
 ansible-playbook -v -i inventory playbooks/main.yml --ask-pass --ask-vault-pass
 ```
 
-### 6. Welcome page It works
+### 6.1 Run ad-hoc command if nginx and php8.1-fpm service failed to restart
+```bash
+ansible all -m raw -a 'service php8.1-fpm restart'
+```  
+
+```
+node-1 | CHANGED | rc=0 >>
+ * Restarting PHP 8.1 FastCGI Process Manager php-fpm8.1                 [ OK ] 
+Connection to node-1 closed.
+
+node-2 | CHANGED | rc=0 >>
+ * Restarting PHP 8.1 FastCGI Process Manager php-fpm8.1                 [ OK ] 
+Connection to node-2 closed.
+```
+
+```bash
+ansible all -m raw -a 'service nginx restart'
+```
+
+```
+node-1 | CHANGED | rc=0 >>
+ * Restarting nginx nginx                                                [ OK ] 
+Connection to node-1 closed.
+
+node-2 | CHANGED | rc=0 >>
+ * Restarting nginx nginx                                                [ OK ] 
+Connection to node-2 closed.
+```
+
+### 7. Welcome page It works
 
 | node-1                     | node-2                    |
 -----------------------------|---------------------------|
@@ -112,7 +150,7 @@ ansible-playbook -v -i inventory playbooks/main.yml --ask-pass --ask-vault-pass
 
 ![screenshot](images/homepage_symfony_demo.jpg)
 
-#### 7. Run check-http task in the playbook
+#### 8. Run check-http task in the playbook
 
 ```
 ansible-playbook playbooks/main.yml --ask-vault-password --tags check-http
@@ -125,7 +163,7 @@ TASK [check-http : check that homepage returns a status 200] *******************
 ok: [node-2] => (item=8080)
 ok: [node-1] => (item=8080)
 ok: [node-2] => (item=8081)
-ok: [node-1] => (item=8081)
+ok: [node-1] => (item=8081)came
 
 PLAY RECAP ****************************************************************************************************************
 node-1                     : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
