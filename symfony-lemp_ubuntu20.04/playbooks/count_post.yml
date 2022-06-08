@@ -1,0 +1,23 @@
+---
+
+- name: Count post posted in symfony demo
+  hosts: all
+  remote_user: root
+  gather_facts: false
+  vars_files:
+    - ../vars/default.yml
+    - ../vars/secrets.yml
+  
+  tasks:
+    - name: "Count the number of posts"
+      count_post:
+         db_user: "{{ db_user }}"
+         db_password: "{{ db_password }}"
+         db_name: "{{ db_name }}"
+         request: "select count(*) from symfony_demo_post"
+      register: posts_number
+      no_log: true
+
+    - name: "Display the numer of posts"
+      debug:
+        var: posts_number.results

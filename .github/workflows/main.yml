@@ -18,12 +18,27 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install ansible-lint
+          pip install -r requirements.txt
           ansible-galaxy collection install community.general
           ansible-galaxy collection install community.mysql
+
+      - name: Lint python module with Flake8
+        run: flake8 symfony-lemp_ubuntu20.04/playbooks/library/
+
+      - name: Set ansible config secrets
+        env:
+          ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+        run:
+          echo "$ANSIBLE_VAULT_PASSWORD" > .ansible-vault-password
 
       - name: Display version
         run: ansible-lint --version
       
-      - name: Lint playbook
-        run: ansible-lint -v symfony-lemp_ubuntu20.04/playbooks/main.yml
+      - name: Lint main playbook
+        run: ansible-playbook --syntax-check -i inventory --vault-password-file .ansible-vault-password symfony-lemp_ubuntu20.04/playbooks/main.yml
+
+      - name: Lint main playbook
+        run: ansible-playbook --syntax-check -i inventory --vault-password-file .ansible-vault-password symfony-lemp_ubuntu20.04/playbooks/http_status.yml
+
+      - name: Lint main playbook
+        run: ansible-playbook --syntax-check -i inventory --vault-password-file .ansible-vault-password symfony-lemp_ubuntu20.04/playbooks/count_post.yml

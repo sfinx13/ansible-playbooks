@@ -1,0 +1,10 @@
+---
+
+- name: Check HTTP Status
+  hosts: all
+  remote_user: root
+  gather_facts: false
+  vars_files:
+    - ../vars/default.yml
+  roles:
+    - { role: "check-http", tags: "check-http" }

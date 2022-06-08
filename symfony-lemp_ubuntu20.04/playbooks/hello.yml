@@ -1,0 +1,17 @@
+---
+
+- name: Count post posted in symfony demo
+  hosts: all
+  remote_user: root
+  gather_facts: false
+  vars_files:
+    - ../vars/default.yml
+  
+  tasks:
+    - name: "Call hello world"
+      hello:
+      register: result
+          
+    - name: "Display hello world"
+      debug:
+        var: result.meta
