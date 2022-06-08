@@ -182,7 +182,7 @@ The documentation defines what the module does, execute this command to see it
 
 ```bash
 $ ansible-doc -M playbooks/library count_post
-`̀ `
+```
 
 ## Documentation
 
