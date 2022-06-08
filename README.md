@@ -12,14 +12,19 @@ symfony-lemp_ubuntu20.04/
 ├── .config/
 ├── playbooks/
 │   ├── roles/
+│   ├── library/
 │   └── main.yml
+│   └── count_post.yml
+│   └── http_status.yml
 ├── vars/
 │   └── default.yml
+│   └── secrets.yml
 ├── ansible.cfg
 ├── build.sh
 ├── run.sh
 ├── Dockerfile
 └── inventory
+└── requirements.txt
 ```
 
 ## Settings  `vars/default.yml`
