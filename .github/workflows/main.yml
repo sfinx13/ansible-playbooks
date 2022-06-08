@@ -37,8 +37,8 @@ jobs:
       - name: Lint main playbook
         run: ansible-playbook --syntax-check -i symfony-lemp_ubuntu20.04/inventory --vault-password-file .ansible-vault-password symfony-lemp_ubuntu20.04/playbooks/main.yml
 
-      - name: Lint main playbook
+      - name: Lint http_status playbook
         run: ansible-playbook --syntax-check -i symfony-lemp_ubuntu20.04/inventory --vault-password-file .ansible-vault-password symfony-lemp_ubuntu20.04/playbooks/http_status.yml
 
-      - name: Lint main playbook
+      - name: Lint count_post playbook
         run: ansible-playbook --syntax-check -i symfony-lemp_ubuntu20.04/inventory --vault-password-file .ansible-vault-password symfony-lemp_ubuntu20.04/playbooks/count_post.yml
