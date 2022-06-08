@@ -173,10 +173,16 @@ node-2                     : ok=1    changed=0    unreachable=0    failed=0    s
 
 #### 8. Run custom playbook written in python
 
-```command
+```bash
 $ cd symfony-lemp_ubuntu20.04
 $ ansible-playbook --syntax-check -i inventory playbooks/count_post.yml --ask-vault-pass
 ```
+
+The documentation defines what the module does, execute this command to see it
+
+```bash
+$ ansible-doc -M playbooks/library count_post
+`̀ `
 
 ## Documentation
 
