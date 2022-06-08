@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 from ansible.module_utils.basic import AnsibleModule
 import MySQLdb
@@ -34,3 +35,37 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+DOCUMENTATION = r'''
+module: count_post
+author: Saidi
+description: Module that allows you to execute an SQL query
+options:
+  db_user:
+    description: Database user
+    required: yes
+  db_password:
+    description: Database password
+    required: yes
+  db_name:
+    description: Database name
+    required: yes
+  request:
+    description: SQL query to execute
+    required: yes
+'''
+
+EXAMPLES = r'''
+- name: "Count the number of posts"
+    count_post:
+        db_user: "{{ db_user }}"
+        db_password: "{{ db_password }}"
+        db_name: "{{ db_name }}"
+        request: "select count(*) from symfony_demo_post"
+'''
+
+RETURN = r'''
+results:
+    description: Request result
+'''
