@@ -43,8 +43,8 @@ symfony-lemp_ubuntu20.04/
 
 To display the contents of an encrypted ansible-vault file without modifying it, just use the view option
 
-```
-ansible-vault view vars/secrets.yml
+```bash
+$ ansible-vault view vars/secrets.yml
 ```
 Vault password is `secret`
 
@@ -60,24 +60,24 @@ Quick steps after cloning the repository
 ### 1. Get the playbook
 
 ```bash
-cd ansible-playbooks/symfony-lemp_ubuntu20.04
+$ cd ansible-playbooks/symfony-lemp_ubuntu20.04
 ```
 
 ### 2. Customize options
 ```bash
-vi vars/default.yml
+$ vi vars/default.yml
 ```
 
 ### 3. Instll pip dependencies
 ```bash
-pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 
 ### 4. Enable the logs on node manager
 ```bash
-touch /var/log/ansible.log 
-chmod 640 /var/log/ansible.log
-chown [OWNER]:[GROUP] /var/log/ansible.log
+$ touch /var/log/ansible.log 
+$ chmod 640 /var/log/ansible.log
+$ chown [OWNER]:[GROUP] /var/log/ansible.log
 ```
 
 ### 5. Launch docker container to test the playbook
@@ -110,7 +110,7 @@ node-2 | SUCCESS => {
 ### 6. Run the playbook
 > Add ask-pass option is useful the first time, cause need to copy public key to the server
 ```command
-ansible-playbook -v -i inventory playbooks/main.yml --ask-pass --ask-vault-pass
+ansible-playbook -v -i inventory --ask-pass --ask-vault-pass playbooks/main.yml
 ```
 
 ### 6.1 Run ad-hoc command if nginx and php8.1-fpm service failed to restart
@@ -146,14 +146,15 @@ Connection to node-2 closed.
 
 | node-1                     | node-2                    |
 -----------------------------|---------------------------|
-|💻 http://localhost:8080/fr | 💻 http://localhost:8081/fr|
+|💻 http://node-1:8080/fr | 💻 http://node-2:8081/fr|
 
 ![screenshot](images/homepage_symfony_demo.jpg)
 
 #### 8. Run check-http task in the playbook
 
 ```
-ansible-playbook playbooks/main.yml --ask-vault-password --tags check-http
+$ cd symfony-lemp_ubuntu20.04
+$ ansible-playbook --ask-vault-password playbooks/http_status.yml 
 ```
 
 ```
@@ -169,3 +170,16 @@ PLAY RECAP *********************************************************************
 node-1                     : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 node-2                     : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 ```
+
+#### 8. Run custom playbook written in python
+
+```command
+$ cd symfony-lemp_ubuntu20.04
+$ ansible-playbook --syntax-check -i inventory playbooks/count_post.yml --ask-vault-pass
+```
+
+## Documentation
+
+[Encrypting content with Ansible Vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html)
+
+[Developing Ansible modules](https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_general.html)
