@@ -1,0 +1,5 @@
+host;distribution;hostname;machine_id;virtualization_type;memory
+{% for host in groups['all']|sort %}
+{% set facts = hostvars[host].ansible_facts %}
+{{ host }};{{ facts.lsb.description }};{{ facts.hostname }};{{facts.machine_id }};{{ facts.virtualization_type }};{{ facts.memory_mb.real.total }} MB
+{% endfor %}

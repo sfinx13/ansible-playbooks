@@ -1,0 +1,20 @@
+---
+- name: Debug
+  hosts: all
+
+- hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Update file state hosts
+      ansible.builtin.template:
+        src: templates/inventory.csv.j2
+        dest: inventory.csv
+    
+    - name: Register stdout
+      ansible.builtin.command: cat inventory.csv
+      register: output
+      changed_when: false
+    
+    - name: Display stdout
+      ansible.builtin.debug: 
+        var: output.stdout_lines

@@ -1,2 +1,3 @@
 ansible/
 .secrets.txt
+symfony-lemp_ubuntu20.04/playbooks/inventory.csv
