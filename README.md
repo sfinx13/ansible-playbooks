@@ -194,3 +194,5 @@ $ ansible-doc -M playbooks/library count_post
 [Encrypting content with Ansible Vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html)
 
 [Developing Ansible modules](https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_general.html)
+
+[Templating (Jinja2)](https://docs.ansible.com/ansible/latest/user_guide/playbooks_templating.html)
