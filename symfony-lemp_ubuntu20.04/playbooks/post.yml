@@ -1,0 +1,20 @@
+---
+
+- name: Sample post method
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: New task
+      ansible.builtin.uri:
+        url: https://httpbin.org/post
+        method: POST
+        body_format: json
+        body:
+          firstname: John
+          lastname: Doe
+      register: response
+
+    - name: Display response
+      ansible.builtin.debug:
+        var: response.json.json
+      failed_when: response.status > 400
